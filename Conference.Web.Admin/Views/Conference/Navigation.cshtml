@@ -1,0 +1,14 @@
+﻿<div class="page__menu menu">
+    <ul class="menu__list">
+        <li class="menu__item"><a class="menu__back" href="@Url.Action("Index", "Home")"></a></li>
+        <li class="menu__item @RenderIfActive("Index")"><a href="@Url.Action("Index", new {slug=ViewBag.Slug})">会议详情</a></li>
+        <li class="menu__item @RenderIfActive("Seats")"><a href="@Url.Action("Seats", new {slug=ViewBag.Slug})">座位类型</a></li>
+        <li class="menu__item @RenderIfActive("Orders")"><a href="@Url.Action("Orders", new {slug=ViewBag.Slug})">注册</a></li>
+    </ul>
+</div>
+
+@helper RenderIfActive(string actionName) {
+    if(string.Equals(Url.RequestContext.RouteData.Values["action"], actionName)) {
+        <text>menu__item_active</text>
+    }
+}

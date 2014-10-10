@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "登录";
+}
+
+<div class="page__content">
+    <div class="page__wrapper">
+        @using(Html.BeginForm()) {
+            <div class="content-main__header">登录</div>
+            @Html.ValidationSummary(false)
+            <fieldset class="content content_login">
+                <p>请输入你的邮箱与密码来管理你的会议</p>
+                <div class="form">
+                    <div class="form__fieldset">
+                        <label class="form__label">邮箱:<span>*</span></label>
+                        <div class="form__field">
+                            <input type="text" name="email" value="@ViewBag.Email" data-val="true" data-val-required="邮箱必须填写。" />
+                        </div>
+                    </div>
+                    <div class="form__fieldset">
+                        <label class="form__label">访问码:<span>*</span></label>
+                        <div class="form__field">
+                            <input type="password" name="accessCode" data-val="true" data-val-required="访问码必须填写。" />
+                        </div>
+                    </div>
+                    <div class="form__but-box">
+                        <button class="form__but">登录</button>
+                    </div>
+                    <div class="g-clear"></div>
+                </div>
+            </fieldset>
+            <div class="g-clear"></div>
+        }
+    </div>
+</div>
+

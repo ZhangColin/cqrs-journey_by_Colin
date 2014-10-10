@@ -1,0 +1,20 @@
+﻿@model IEnumerable<Conference.SeatType>
+           
+@foreach(var item in Model) {
+    <tr data-pkey="@item.Id">
+        <td>
+            <a href="#makeRowEditable" class="makeRowEditable">@item.Name</a>
+        </td>
+        <td>@Html.DisplayFor(modelItem=>item.Description)</td>
+        <td>@Html.DisplayFor(modelItem=>item.Quantity)</td>
+        <td>$@Html.DisplayFor(modelItem=>item.Price)</td>
+        <td>
+            @if(ViewBag.WasEverPublished) {
+                <span title="会议至少发布过一次，不能删除该座位类型。">删除</span>
+            }
+            else {
+                <a href="#deleteRow" class="deleteRow"></a>
+            }
+        </td>
+    </tr>
+}

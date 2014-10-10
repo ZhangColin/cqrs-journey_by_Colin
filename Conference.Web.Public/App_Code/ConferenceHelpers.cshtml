@@ -1,0 +1,25 @@
+﻿@helper ConferenceTitle(string conferenceName, string tagline) {
+    <h1 class="page__head page__wrapper">
+        @conferenceName
+        @if(!string.IsNullOrEmpty(tagline)) {
+            <br/>
+            <span class="page__head-note">(@tagline)</span>
+        }
+    </h1>
+}
+
+@helper ExpirationBox(long countdownDate, string redirectUrl) {
+    if (countdownDate > 0) {
+        <div id="countdown" class="reg-time-info">
+            <div id="countdown_time" data-targetDate="@countdownDate" data-redirectUrl="@redirectUrl" class="reg-time-info__title">
+                15:00
+            </div>
+            <div id="countdown_warning" class="reg-time-info__txt">
+                <p>
+                    请在15分钟内完成注册。15分钟后，这个预订将分配给其它用户。
+                </p>
+            </div>
+        </div>
+    }
+}
+

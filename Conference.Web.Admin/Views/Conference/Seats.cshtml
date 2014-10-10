@@ -1,0 +1,190 @@
+﻿@model IEnumerable<Conference.SeatType>
+@{
+    ViewBag.Title = "座位类型";
+    ViewBag.PageType = "page_conference-seats";
+}
+
+@section Head {
+    <style>
+        #grid, #grid input, #grid button { clear: both; width: 100%; }
+        #grid thead { white-space: nowrap; }
+        #grid thead a { text-decoration: none; }
+        #grid .error { background-color: #f66; color: #000; }
+        #grid-container .hidden { display: none; }
+        .form__but.createRow, .form__but.editRow { margin: 1px 0px; }
+    </style>
+}
+
+@section Navigation
+{
+    <div class="quick__login">@ViewBag.OwnerName</div>
+}
+
+@section PageNavigation {
+    @Html.Partial("Navigation")
+}
+
+<h1 class="page__head page__wrapper">座位类型</h1>
+
+<div class="page__content">
+    <div class="page__wrapper">
+        <div class="content-main__wrapper">
+            <div class="content-main__main">
+                <div id="grid-container" class="content">
+                    <p>点击座位类型名称进行编辑</p>
+                    <table id="grid" class="content__table_first-cell-wide">
+                        <thead>
+                            <tr>
+                                <th style="width: 30%">座位类型</th>
+                                <th style="width: 40%">描述</th>
+                                <th style="width: 10%">配额</th>
+                                <th style="width: 10%">价格</th>
+                                <th class="content__table__delete">&nbsp;</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{Html.RenderAction("SeatGrid", new {slug = ViewBag.Slug});}
+                            <tr class="seats-type-add hidden">
+                                <td colspan="10"><a href="#" class="js-add-edit-type">添加座位类型</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="nav content-main__nav">
+                    <a class="nav__left" href="@Url.Action("Index")">返回</a>
+                </div>
+            </div>
+        </div>
+        <div class="g-clear"></div>
+    </div>
+</div>
+
+<div class="lightbox">
+    <div class="lightbox-bg"></div>
+    <table class="lightbox">
+        <tr>
+            <td class="lightbox">
+                <div class="lightbox-content lightbox-content_delete">
+                    <div class="lightbox-content__title">
+                        删除座位类型
+                    </div>
+                    <div class="lightbox-content_delete__q">
+                        您确定想删除？
+                    </div>
+                    <div class="lightbox-content_delete__action">
+                        <a href="#" class="lightbox-content_delete__action__no">否</a>
+                        <a href="#" class="lightbox-content_delete__action__yes">是</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<script type="text/javascript">
+    (function($) {
+        $.ajaxSetup({ cache: false });
+
+        function createRow(row) {
+            var postParams = getPostParams(row);
+            $.post('@Html.Raw(Url.Action("CreateSeat", new {slug = ViewBag.Slug}))', postParams)
+                .done(function(newRow) {
+                    row.replaceWith(newRow);
+                })
+                .fail(function() {
+                    row.addClass('error');
+                });
+        }
+
+        function makeRowEditable(row) {
+            $.get('@Html.Raw(Url.Action("EditSeat", new{slug=ViewBag.Slug, id="__ID__"}))'.replace(/__ID__/, row.data('pkey')), function(editableRow) {
+                row.replaceWith(editableRow);
+            });
+        }
+
+        function editRow(row) {
+            var postParams = getPostParams(row);
+            postParams.push({ name: 'Id', value: row.data('pkey') });
+            $.post('@Html.Raw(Url.Action("EditSeat", new {slug = ViewBag.Slug, id="__ID__"}))'.replace(/__ID__/, row.data('pkey')), postParams)
+                .done(function(newRow) {
+                    row.replaceWith(newRow);
+                })
+                .fail(function() {
+                    row.addClass('error');
+                });
+        }
+
+        function getPostParams(row) {
+            return row.find(':input[name]:not(:disabled)').filter(':not(:checkbox), :checked').map(function() {
+                var input = $(this);
+                return { name: input.attr('name'), value: input.val() };
+            }).get();
+        }
+
+        $(function() {
+            var $containerContext = $('#grid-container');
+            var $gridContext = $containerContext.find('#grid');
+
+            $containerContext.find('.seats-type-add').show().click(function(e) {
+                $.get('@Html.Raw(Url.Action("CreateSeat", new {slug = ViewBag.Slug}))', function(emptyRow) {
+                    $gridContext.find('tbody').prepend(emptyRow);
+                });
+                e.preventDefault();
+            });
+
+            $gridContext.find('tr > *').filter(':last-child').removeClass('hidden');
+
+            $gridContext.delegate('.createRow', 'click', function() {
+                createRow($(this).parents('tr'));
+            });
+
+            $gridContext.delegate('.cancelCreateRow', 'click', function() {
+                $(this).parents('tr').remove();
+            });
+
+            $gridContext.delegate('.makeRowEditable', 'click', function(e) {
+                makeRowEditable($(this).parents('tr'));
+                e.preventDefault();
+            });
+
+            $gridContext.delegate('.editRow', 'click', function() {
+                editRow($(this).parents('tr'));
+            });
+
+            $gridContext.delegate('.cancelEditRow', 'click', function() {
+                var row = $(this).parents('tr');
+                $.get('@Html.Raw(Url.Action("SeatRow", new{slug = ViewBag.Slug, id="__ID__"}))'.replace(/__ID__/, row.data('pkey')), function(newRow) {
+                    row.replaceWith(newRow);
+                });
+            });
+
+            $gridContext.delegate('.deleteRow', 'click', function(e) {
+                var $lightbox = $('div.lightbox');
+                $lightbox.find('.lightbox-content_delete__action__yes').attr('data-row', $(this).parents('tr').data('pkey'));
+                $('div.lightbox').show();
+                e.preventDefault();
+            });
+
+            $('.lightbox-content_delete__action__no').on('click', function(e) {
+                $('div.lightbox').hide().find('.lightbox-content_delete__action__yes').attr('data-row', null);
+                e.preventDefault();
+            });
+
+            $('.lightbox-content_delete__action__yes').on('click', function(e) {
+                var $line = $('div.lightbox').hide().find('.lightbox-content_delete__action__yes');
+                var $row = $gridContext.find('tr[data-pkey=' + $line.attr('data-row') + ']');
+
+                $.post('@Html.Raw(Url.Action("DeleteSeat", new{slug=ViewBag.Slug, id="__ID__"}))'.replace(/__ID__/, $row.data('pkey')))
+                    .done(function() {
+                        $row.remove();
+                    })
+                    .fail(function() {
+                        alert('删除错误。');
+                    });
+                $link.attr('data-row', null);
+                e.preventDefault();
+            });
+
+        });
+    })(jQuery);
+</script>

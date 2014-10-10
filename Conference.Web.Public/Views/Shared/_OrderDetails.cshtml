@@ -1,0 +1,24 @@
+﻿@model Registration.ReadModel.PricedOrder
+           
+<table class="content__table_first-cell-wide">
+    <tr>
+        <th style="width: 75%">注册类型</th>
+        <th scope="col" style="text-align: right">单价</th>
+        <th scope="col">数量</th>
+        <th scope="col">合计</th>
+    </tr>
+    @for(var i = 0; i < Model.Lines.Count; i++) {
+        <tr>
+            <td>@Html.DisplayFor(model=>model.Lines[i].Description)</td>
+            <td style="text-align: right">$@Html.DisplayFor(model => model.Lines[i].UnitPrice)</td>
+            <td>@Html.DisplayFor(model => model.Lines[i].Quantity)</td>
+            <td>@Html.DisplayFor(model => model.Lines[i].LineTotal)</td>
+        </tr>
+    }
+    <tr>
+        <td></td>
+        <td></td>
+        <td class="content__table-cell_right content__cell_total">总计：</td>
+        <td class="content__cell_total content__table-cell_left">$@Html.DisplayFor(model=>model.Total)</td>
+    </tr>
+</table>

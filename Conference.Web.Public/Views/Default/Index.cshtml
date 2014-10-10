@@ -1,0 +1,19 @@
+﻿@model IEnumerable<Registration.ReadModel.ConferenceAlias>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h1 class="page__head page__wrapper">会议列表</h1>
+<div class="page__content">
+    <div class="page__wrapper content-main">
+        <p>
+            点击进入会议详情：
+        </p>
+        <ul>
+            @foreach(var conference in Model) {
+                <li>@Html.ActionLink(conference.Name, "Display", "Conference", new {conferenceCode = conference.Code}, null)</li>
+            }
+        </ul>
+    </div>
+</div>
+

@@ -1,0 +1,30 @@
+﻿@model Conference.SeatType
+           
+<tr @if(Model!=null){
+        @:data-pkey="@Model.Id"
+    }>
+    <td>
+        @Html.EditorFor(model=>model.Name)
+        @Html.ValidationMessageFor(model=>model.Name)
+    </td>
+    <td>
+        @Html.EditorFor(model=>model.Description)
+        @Html.ValidationMessageFor(model=>model.Description)
+    </td>
+    <td>
+        @Html.EditorFor(model=>model.Quantity)
+        @Html.ValidationMessageFor(model=>model.Quantity)
+    </td>
+    <td>
+        @Html.EditorFor(model=>model.Price)
+        @Html.ValidationMessageFor(model=>model.Price)
+    </td>
+    <td>
+        @if(ViewContext.RouteData.Values["Action"].ToString() == "EditSeat") {
+            <button class="form__but editRow">保存</button><button class="form__but cancelEditRow">取消</button>
+        }
+        else {
+            <button class="form__but createRow">创建</button><button class="form__but cancelCreateRow">取消</button>
+        }
+    </td>
+</tr>
