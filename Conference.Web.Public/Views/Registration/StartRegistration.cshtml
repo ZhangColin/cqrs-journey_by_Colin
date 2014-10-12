@@ -1,0 +1,118 @@
+﻿@model Conference.Web.Public.Models.OrderViewModel
+@{
+    ViewBag.Title = "注册 " + ViewBag.Conference.Name;
+}
+
+
+<div class="page__content">
+    <div class="page__wrapper content-main content-main_register">
+        <div class="content-main__wrapper">
+            <div class="content-main__main">
+                @using(Html.BeginForm()) {
+                    <div class="content-main__header">注册</div>
+                    <div class="content">
+                        @Html.ValidationSummary()
+                        @Html.Hidden("OrderId")
+                        @Html.Hidden("OrderVersion")
+                        <p>请选择</p>
+                        <h3>活动门票</h3>
+                        <table class="content__table_first-cell-wide">
+                            <tr>
+                                <th style="width: 75%">注册类型</th>
+                                <th scope="col" style="text-align: right">单价</th>
+                                <th scope="col">可用</th>
+                                <th scope="col">总共</th>
+                            </tr>
+                            @for(int i=0; i<Model.Items.Count; i++) {
+                                var item = Model.Items[i];
+                                <tr class="lineItem@(item.PartiallyFulfilled?" content__table__error": "")">
+                                    <td>
+                                        @Html.DisplayFor(model=>item.SeatType.Name)
+                                        <p class="content__note">@Html.DisplayFor(model=>item.SeatType.Description)</p>
+                                    </td>
+                                    <td style="text-align: right">
+                                        $<span class="unitPrice">@Html.DisplayFor(model=>item.SeatType.Price)</span>
+                                    </td>
+                                    <td style="text-align: right">@Html.DisplayFor(model=>item.AvailableQuantityForOrder)</td>
+                                    <td>
+                                        @Html.Hidden("Seats["+i+"].SeatType", item.SeatType.Id)
+                                        @if((item.MaxSelectionQuantity > 0)) {
+                                            @Html.DropDownList("Seats[" + i + "].Quantity", new SelectList(Enumerable.Range(0, item.MaxSelectionQuantity+1), item.OrderItem.ReservedSeats), new {@class="itemQuantity"})
+                                        }
+                                        else {
+                                            <input type="hidden" name="Seats[@i].Quantity" value="0"/>
+                                            <text>预订完</text>
+                                        }
+                                    </td>
+                                </tr>
+                                
+                                if(item.PartiallyFulfilled) {
+                                    <tr>
+                                        <td class="content__table__error-info" colspan="5">
+                                            <label class="form__chb__ite">不能保留所有请求的席位。座位数量设置为可用的座位。</label>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            <tr>
+                                <td colspan="3" class="content__table-cell_right content__cell_total">总计：</td>
+                                <td class="content__cell_total content__table-cell_left">$<span id="total">0</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="nav content-main__nav">
+                        <a class="nav__left" href="@Url.Action("Display", "Conference")">返回</a>
+                        <button id="Next" class="nav__right" type="submit">订购</button>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="content-main__aside">
+            <div class="content-main__header"></div>
+            @ConferenceHelpers.ExpirationBox(Model.ReservationExpirationDate, Url.Action("ShowExpiredOrder", "Registration", new { conferenceCode = this.ViewBag.Conference.Code, orderId = this.Model.OrderId }))
+        </div>
+        <div class="g-clear"></div>
+    </div>
+</div>
+
+@section PageNavigation
+{
+    <div class="page__menu menu">
+        <ul class="menu__list">
+            <li class="menu__item"><a class="menu__back" href="@Url.Action("Display", "Conference")"></a></li>
+            <li class="menu__item"><a href="#">About event</a></li>
+            <li class="menu__item menu__item_active">Register</li>
+            <li class="menu__item"><a href="#">Destination</a></li>
+            <li class="menu__item"><a href="#">Speakers</a></li>
+            <li class="menu__item"><a href="#">Sessions</a></li>
+            <li class="menu__item"><a href="#">Sponsors</a></li>
+            <li class="menu__item"><a href="#">Organizers</a></li>
+            <li class="menu__item"><a href="#">Press</a></li>
+        </ul>
+    </div>
+}
+
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("~/Content/form/form.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/reg-time-info/reg-time-info.js")"></script>
+    <script type="text/javascript">
+    $(function () {
+        function calculateTotals() {
+            var total = 0;
+            $(".lineItem").each(function (index, item) {
+                var unitPrice = $(item).find(".unitPrice").text();
+                var quantity = $(item).find(".itemQuantity input").val();
+                total += unitPrice * (quantity ? quantity : 0);
+            });
+
+            // round to 2 decimals
+            total = Math.round(total * 100) / 100;
+            $("#total").text(total);
+        }
+
+        $(".itemQuantity input").change(calculateTotals);
+        calculateTotals();
+    });
+    </script>
+}

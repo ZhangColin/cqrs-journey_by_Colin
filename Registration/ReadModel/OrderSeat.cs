@@ -12,6 +12,10 @@ namespace Registration.ReadModel {
             this.Attendee = new PersonalInfo();
         }
 
+        public OrderSeat() {
+            this.Attendee = new PersonalInfo();
+        }
+
         public PersonalInfo Attendee { get; set; }
     }
 }

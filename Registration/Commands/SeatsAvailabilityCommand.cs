@@ -7,7 +7,7 @@ namespace Registration.Commands {
         public Guid ConferenceId { get; set; }
 
         public SeatsAvailabilityCommand() {
-            Id=new Guid();
+            Id=Guid.NewGuid();
         }
 
         string IMessageSessionProvider.SessionId {

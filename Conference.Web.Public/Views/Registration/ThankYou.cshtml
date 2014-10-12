@@ -1,0 +1,40 @@
+﻿@model Registration.ReadModel.DraftOrder
+@{
+    ViewBag.Title = "注册了"+ViewBag.Conference.Name;
+}
+
+
+<h1 class="page__head page__wrapper">谢谢</h1>
+<div class="page__content">
+    <div class="page__wrapper content-main content-main_register">
+        <div class="content-main__wrapper">
+            <div class="content-main__main">
+                <div class="content-main__header">
+                    注册成功
+                </div>
+                <div class="content">
+                    <p>
+                        您成功提交了你的注册。<br/>
+                        请通过邮箱确认你的订单 #<strong id="accessCode">@Model.AccessCode</strong>
+                    </p>
+                    <p>
+                        <strong>下一步：</strong>
+                    </p>
+                    <p>
+                        你随时可以通过电子邮件地址或会议号 <strong>@Model.AccessCode</strong> 访问更新订单。<br/>
+                        <a href="@Url.Action("Display", "Order", new {orderId = Model.OrderId})">我的注册</a><br/>
+                        <a href="@Url.Action("Display", "Conference")">会议首页</a>
+                    </p>
+                </div>
+                <div class="nav content-main__nav">
+                    <a class="nav__right" href="@Url.Action("Display", "Order", new { orderId = Model.OrderId })">处理席位分配
+                    <span class="nav__right-small">您可以稍后进行席位注册</span></a>
+                </div>
+            </div>
+        </div>
+        <div class="content-main__aside">
+            <div class="content-main__header"></div>
+        </div>
+        <div class="g-clear"></div>
+    </div>
+</div>

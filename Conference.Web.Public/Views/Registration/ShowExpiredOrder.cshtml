@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "预订过期 " + ViewBag.Conference.Name;
+}
+
+@ConferenceHelpers.ConferenceTitle(ViewBag.Conference.Name, ViewBag.Conference.Tagline)
+
+<h2 class="page__head page__wrapper">您的订单已经过期</h2>
+<div class="page__content">
+    <div class="page__wrapper content-main">
+        <p>预留的座位不再预留</p>
+        <p>
+            您可以<a href="@Url.Action("StartRegistration", "Registration", new {conferenceCode = ViewBag.Conference.Code})">
+                   开始一个新订单
+               </a>或者回到<a href="@Url.Action("Display", "Conference", new { conferenceCode = ViewBag.Conference.Code })">
+                           会议首页
+                       </a>
+        </p>
+    </div>
+</div>

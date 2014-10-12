@@ -1,0 +1,56 @@
+﻿@model Registration.ReadModel.OrderSeats
+@{
+    ViewBag.Title = "分配席位";
+}
+
+<h1 class="page__head page__wrapper">分配席位</h1>
+<div class="page__content">
+    <div class="page__wrapper content-main content-main_main_assignseats">
+        <div class="content-main__wrapper">
+            <div class="content-main__main">
+                @using(Html.BeginForm()) {
+                    <div class="content-main__header">席位</div>
+                    <div class="content">
+                        @Html.ValidationSummary()
+                        @Html.HiddenFor(model=>model.OrderId)
+                        <p>请购买高席位</p>
+                        <h3>席位</h3>
+                        <table class="content__table_first-cell-wide">
+                            <tr>
+                                <th scope="col">席位类型</th>
+                                <th scope="col">First name</th>
+                                <th scope="col">Last name</th>
+                                <th scope="col">Email</th>
+                            </tr>
+                            @foreach(var seat in Model.Seats) {
+                                <tr>
+                                    <td>
+                                        @Html.HiddenFor(model=>seat.Position)
+                                        @Html.DisplayFor(model=>seat.SeatName)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model=>seat.Attendee.FirstName)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model=>seat.Attendee.LastName)
+                                    </td>
+                                    <td>
+                                        @Html.EditorFor(model=>seat.Attendee.Email)
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                    <div class="nav content-main__nav">
+                        <button id="next" class="nav__right" type="submit">保存<span class="nav__right-small">将收到邮件通知</span></button>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="content-main__aside">
+            <div class="content-main__header"></div>
+        </div>
+        <div class="g-clear"></div>
+    </div>
+</div>
+

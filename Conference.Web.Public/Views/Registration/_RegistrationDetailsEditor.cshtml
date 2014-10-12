@@ -1,0 +1,33 @@
+﻿@model Registration.Commands.AssignRegistrantDetails
+
+<div class="content-main__header">注册</div>
+<div class="content">
+    @Html.ValidationSummary()
+    <div class="form">
+        <fieldset class="form__fieldset">
+            <label class="form__label">First Name:<span>*</span></label>
+            <div class="form__field">
+                @Html.EditorFor(model => model.FirstName)
+            </div>
+        </fieldset>
+        <fieldset class="form__fieldset">
+            <label class="form__label">邮箱:<span>*</span></label>
+            <div class="form__field">
+                @Html.EditorFor(model => model.Email)
+            </div>
+        </fieldset>
+        <fieldset class="form__fieldset">
+            <label class="form__label">Last Name:<span>*</span></label>
+            <div class="form__field">
+                @Html.EditorFor(model => model.LastName)
+            </div>
+        </fieldset>
+        <fieldset class="form__fieldset">
+            <label class="form__label">确认邮箱:<span>*</span></label>
+            <div class="form__field">
+                <input type="text" data-val="true" data-val-equalto="邮箱不匹配" data-val-equalto-other="Email" data-val-required="请确认邮箱地址" />
+            </div>
+        </fieldset>
+        <div class="g-clear"></div>
+    </div>
+</div>

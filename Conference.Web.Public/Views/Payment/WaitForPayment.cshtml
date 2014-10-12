@@ -1,0 +1,18 @@
+﻿
+@{
+    ViewBag.Title = "WaitForPayment";
+}
+
+<h2>不能确定付款的状态</h2>
+
+<p>请等待处理请求</p>
+
+<p>页面将在5秒后自动刷新，如果不刷新，请点击浏览器的刷新按钮进行刷新。</p>
+
+<script type="text/javascript">
+    $(function() {
+        setTimeout(function() {
+            window.location.reload();
+        }, 5000);
+    });
+</script>

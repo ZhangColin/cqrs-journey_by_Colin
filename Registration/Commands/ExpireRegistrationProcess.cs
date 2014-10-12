@@ -6,7 +6,7 @@ namespace Registration.Commands {
         public Guid Id { get; private set; }
 
         public ExpireRegistrationProcess() {
-            Id=new Guid();
+            Id=Guid.NewGuid();
         }
 
         public Guid ProcessId { get; set; }

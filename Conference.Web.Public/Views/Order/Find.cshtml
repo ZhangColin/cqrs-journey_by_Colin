@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = ViewBag.ConferenceName + "的订单";
+}
+
+<h1 class="page__head page__wrapper">位置注册</h1>
+<div class="page__content">
+    <div class="page__wrapper content-main content-main_register">
+        <div class="content-main__wrapper">
+            <div class="content-main__main">
+                @using (Html.BeginForm()) {
+                    <div class="content">
+                        <div class="form">
+                            <fieldset class="form__fieldset">
+                                <label class="form__label">电子邮件：<span>*</span></label>
+                                <div class="form__field">
+                                    <input type="text" class="" name="email" />
+                                </div>
+                            </fieldset>
+                            <fieldset class="form__fieldset">
+                                <label class="form__label">订单 #：<span>*</span></label>
+                                <div class="form__field">
+                                    <input type="text" class="" name="accessCode" />
+                                </div>
+                            </fieldset>
+                            <div class="g-clear"></div>
+                        </div>
+                    </div>
+                    <div class="nav content-main__nav">
+                        <button id="find" class="nav__right" type="submit">搜索</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "模拟第三方支付结算处理";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<h2>Pay</h2>
+
+@using (Html.BeginForm()) {
+    <div>
+        Item: @this.ViewBag.ItemName
+    </div>
+    <div>
+        Amount: @this.ViewBag.ItemAmount
+    </div>
+    <br />
+
+    @Html.Hidden("ReturnUrl")
+    @Html.Hidden("CancelReturnUrl")
+    <input type="submit" value="accepted" name="paymentResult" title="支付" /><span>
+        &nbsp;
+        &nbsp;
+    </span>
+    <input type="submit" value="rejected" name="paymentResult" title="放弃" />
+}

@@ -35,10 +35,8 @@ namespace WorkerRoleCommandProcessor {
         private IUnityContainer _container;
         private CancellationTokenSource _cancellationTokenSource;
         private List<IProcessor> _processors;
-        private bool _instrumentationEnabled;
 
-        public ConferenceProcessor(bool instrumentationEnabled = false) {
-            this._instrumentationEnabled = instrumentationEnabled;
+        public ConferenceProcessor() {
 
             this._cancellationTokenSource = new CancellationTokenSource();
             this._container = CreateContainer();
@@ -84,7 +82,7 @@ namespace WorkerRoleCommandProcessor {
             container.RegisterType<ConferenceContext>(new TransientLifetimeManager(),
                 new InjectionConstructor("ConferenceManagement"));
 
-            var serializer = _container.Resolve<ITextSerializer>();
+            var serializer = container.Resolve<ITextSerializer>();
             var metadata = container.Resolve<IMetadataProvider>();
 
             container.RegisterType<IBlobStorage, SqlBlobStorage>(new ContainerControlledLifetimeManager(),
@@ -127,7 +125,14 @@ namespace WorkerRoleCommandProcessor {
         }
 
         private void RegisterEventHandlers(UnityContainer container, EventProcessor eventProcessor) {
-            
+            eventProcessor.Register(container.Resolve<RegistrationProcessManagerRouter>());
+            eventProcessor.Register(container.Resolve<DraftOrderViewModelGenerator>());
+            eventProcessor.Register(container.Resolve<PricedOrderViewModelGenerator>());
+            eventProcessor.Register(container.Resolve<ConferenceViewModelGenerator>());
+            eventProcessor.Register(container.Resolve<SeatAssignmentsViewModelGenerator>());
+            eventProcessor.Register(container.Resolve<SeatAssignmentsHandler>());
+            eventProcessor.Register(container.Resolve<OrderEventHandler>());
+            eventProcessor.Register(container.Resolve<SqlMessageLogHandler>());
         }
 
         private void RegisterRepository(UnityContainer container) {

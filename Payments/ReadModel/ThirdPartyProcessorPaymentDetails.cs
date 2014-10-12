@@ -19,9 +19,10 @@ namespace Payments.ReadModel {
         public Guid PaymentSourceId { get; private set; }
         public string Description { get; private set; }
         public decimal TotalAmount { get; private set; }
+
         protected ThirdPartyProcessorPaymentDetails() {}
 
-        protected ThirdPartyProcessorPaymentDetails(Guid id, ThirdPartyProcessorPayment.States state, Guid paymentSourceId,
+        public ThirdPartyProcessorPaymentDetails(Guid id, ThirdPartyProcessorPayment.States state, Guid paymentSourceId,
             string description, decimal totalAmount) {
             this.Id = id;
             this.State = state;

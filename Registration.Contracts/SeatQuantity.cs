@@ -8,6 +8,8 @@ namespace Registration.Contracts {
         public Guid SeatType { get; set; }
         public int Quantity { get; set; }
 
+        protected SeatQuantity() { }
+
         public SeatQuantity(Guid seatType, int quantity) {
             this.SeatType = seatType;
             this.Quantity = quantity;

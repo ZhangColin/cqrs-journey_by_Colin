@@ -1,0 +1,60 @@
+﻿@using Conference.Web.Public.Utils
+@model Conference.Web.Public.Models.RegistrationViewModel
+@{
+    ViewBag.Title = "注册到 "+ViewBag.Conference.Name;
+}
+
+@ConferenceHelpers.ConferenceTitle(ViewBag.Conference.Name, ViewBag.Conference.Tagline)
+
+<div class="page__content">
+    <div class="page__wrapper content-main content-main_register">
+        <div class="content-main__wrapper">
+            <div class="content-main__main">
+                <div class="content-main__header">席位信息</div>
+                <div class="content">
+                    @Html.Partial("_OrderDetails", Model.Order)
+                </div>
+                @using(Html.BeginForm()) {
+                    @Html.Partial("_RegistrationDetailsEditor", Model.RegistrantDetails)
+                    if(!Model.Order.IsFreeOfCharge) {
+                        <div class="content-main__header">
+                            账单信息
+                        </div>
+                        <div class="content">
+                            <div class="form">
+                                <fieldset class="form__rb form__rb_m">
+                                    <div class="form__rb__title">支付方式:<span>*</span></div>
+                                    <label class="form__rb__item _a js-radiobutton" name="js-creditcard">
+                                        @Html.RadioButton("paymentType", "thirdParty", true) Credit card
+                                    </label>
+                                    <label class="form__rb__item js-radiobutton" name="js-invoiceme">
+                                        @Html.RadioButton("paymentType", "invoice", new { disabled = "disabled" }) Invoice me
+                                    </label>
+                                </fieldset>
+                            </div>
+                        </div>
+                    }
+                    <div class="nav content-main__nav">
+                        <a class="nav__left" href="@Url.Action("StartRegistration", "Registration", new{orderId=Model.Order.OrderId})">返回</a>
+                        <button id="Next" class="nav__right" type="submit">处理
+                        @if(!Model.Order.IsFreeOfCharge) {
+                            <span class="nav__right-small">第三方支付</span>
+                        }
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="content-main__aside">
+            <div class="content-main__header"></div>
+            @ConferenceHelpers.ExpirationBox(Model.Order.ReservationExpirationDate.ToEpochMilliseconds(), Url.Action("ShowExpiredOrder", "Registration", new { conferenceCode = this.ViewBag.Conference.Code, orderId = this.Model.RegistrantDetails.OrderId }))
+        </div>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script type="text/javascript" src="@Url.Content("~/Content/form/form.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Content/reg-time-info/reg-time-info.js")"></script>
+}
